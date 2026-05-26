@@ -17,14 +17,11 @@ jobs:
       - name: Checkout Codebase
         uses: actions/checkout@v4
 
-      - name: Authenticate to AWS Cloud Architecture
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+      - name: Local Simulation Architecture Verification
+        run: |
+          echo "Simulating secure environment check..."
+          echo "Target Registry: ${{ env.DOCKER_REGISTRY }}"
 
-      - name: Execute Enterprise Docker Build and Push
+      - name: Execute Enterprise Docker Build
         run: |
           docker build -t ${{ env.DOCKER_REGISTRY }}/${{ env.APP_NAME }}:latest .
-
