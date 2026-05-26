@@ -1,0 +1,30 @@
+name: Core Platform CI-CD Engine
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  DOCKER_REGISTRY: "docker.io"
+  APP_NAME: "enterprise-service"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Authenticate to AWS Cloud Architecture
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Execute Enterprise Docker Build and Push
+        run: |
+          docker build -t ${{ env.DOCKER_REGISTRY }}/${{ env.APP_NAME }}:latest .
+
